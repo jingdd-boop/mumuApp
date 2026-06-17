@@ -37,9 +37,51 @@ const MOOD_LEVELS = [
   { value: 5, label: '很好', emoji: '😄' },
 ];
 
+const ENGORGEMENT_LEVELS = [
+  { value: 'none', label: '无涨奶' },
+  { value: 'mild', label: '轻度涨奶' },
+  { value: 'moderate', label: '中度涨奶' },
+  { value: 'severe', label: '重度涨奶' },
+];
+
+const BLOCKED_STATUS = [
+  { value: 'no', label: '无堵奶' },
+  { value: 'yes', label: '有堵奶' },
+];
+
+const FEEDING_STATUS = [
+  { value: 'good', label: '顺利' },
+  { value: 'fair', label: '一般' },
+  { value: 'hard', label: '困难' },
+];
+
+const ENGORGEMENT_SCORE = { none: 0, mild: 1, moderate: 2, severe: 3 };
+
 function labelOf(list, value) {
   const item = list.find((i) => i.value === value);
   return item ? item.label : value;
+}
+
+function formatBreastDetail(payload = {}) {
+  const parts = [labelOf(ENGORGEMENT_LEVELS, payload.engorgement || 'none')];
+  if (payload.blocked === 'yes') {
+    let blocked = '有堵奶';
+    if (payload.side) blocked += `（${labelOf(BREAST_SIDES, payload.side)}）`;
+    parts.push(blocked);
+  } else {
+    parts.push('无堵奶');
+  }
+  if (payload.feeding) {
+    parts.push(`哺乳${labelOf(FEEDING_STATUS, payload.feeding)}`);
+  }
+  if (payload.note) parts.push(payload.note);
+  return parts.join(' · ');
+}
+
+function breastSeverityScore(payload = {}) {
+  let score = ENGORGEMENT_SCORE[payload.engorgement] || 0;
+  if (payload.blocked === 'yes') score += 2;
+  return score;
 }
 
 function formatBabyRecord(record) {
@@ -103,13 +145,29 @@ function formatMomRecord(record) {
         detail: mood ? mood.label : '',
       };
     }
+    case 'weight': {
+      const kg = payload.kg != null ? Number(payload.kg) : null;
+      let detail = kg != null && !Number.isNaN(kg) ? `${kg} kg` : '';
+      if (payload.note) detail += (detail ? ' · ' : '') + payload.note;
+      return {
+        icon: '⚖️',
+        title: '体重',
+        detail: detail || '—',
+      };
+    }
+    case 'breast':
+      return {
+        icon: '🤱',
+        title: '乳房护理',
+        detail: formatBreastDetail(payload),
+      };
     default:
       return { icon: '📝', title: '记录', detail: '' };
   }
 }
 
 function formatRecord(record) {
-  if (record.source === 'mom' || ['lochia', 'pain', 'mood'].includes(record.type)) {
+  if (record.source === 'mom' || ['lochia', 'pain', 'mood', 'weight', 'breast'].includes(record.type)) {
     return formatMomRecord(record);
   }
   return formatBabyRecord(record);
@@ -127,6 +185,11 @@ module.exports = {
   LOCHIA_COLORS,
   LOCHIA_AMOUNTS,
   MOOD_LEVELS,
+  ENGORGEMENT_LEVELS,
+  BLOCKED_STATUS,
+  FEEDING_STATUS,
+  formatBreastDetail,
+  breastSeverityScore,
   formatRecord,
   nowTimeStr,
   labelOf,

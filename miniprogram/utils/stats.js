@@ -100,6 +100,10 @@ function aggregateMomDay(records, dateStr) {
   let lochiaLatest = null;
   const painScores = [];
   let moodLatest = null;
+  let weightLatest = null;
+  let weightLatestTime = '';
+  let breastLatest = null;
+  let breastLatestTime = '';
 
   dayRecords.forEach((r) => {
     const p = r.payload || {};
@@ -110,6 +114,18 @@ function aggregateMomDay(records, dateStr) {
       painScores.push(Number(p.score));
     } else if (r.type === 'mood' && p.level != null) {
       moodLatest = p.level;
+    } else if (r.type === 'weight' && p.kg != null) {
+      const time = r.time || '00:00';
+      if (!weightLatest || time.localeCompare(weightLatestTime) > 0) {
+        weightLatest = Number(p.kg);
+        weightLatestTime = time;
+      }
+    } else if (r.type === 'breast') {
+      const time = r.time || '00:00';
+      if (!breastLatest || time.localeCompare(breastLatestTime) > 0) {
+        breastLatest = p;
+        breastLatestTime = time;
+      }
     }
   });
 
@@ -133,6 +149,11 @@ function aggregateMomDay(records, dateStr) {
     }
   }
 
+  const weightDetail = weightLatest != null && !Number.isNaN(weightLatest) ? `${weightLatest} kg` : '未记录';
+
+  const breastDetail = breastLatest ? recordUtil.formatBreastDetail(breastLatest) : '未记录';
+  const breastSeverity = breastLatest ? recordUtil.breastSeverityScore(breastLatest) : null;
+
   return {
     lochiaCount,
     lochiaDetail,
@@ -140,7 +161,16 @@ function aggregateMomDay(records, dateStr) {
     painDetail,
     moodEmoji,
     moodLabel,
-    hasData: lochiaCount > 0 || painScores.length > 0 || moodLatest != null,
+    weightValue: weightLatest,
+    weightDetail,
+    breastDetail,
+    breastSeverity,
+    hasData:
+      lochiaCount > 0 ||
+      painScores.length > 0 ||
+      moodLatest != null ||
+      weightLatest != null ||
+      breastLatest != null,
   };
 }
 
@@ -217,8 +247,14 @@ function buildMomStats(momRecords, birthDate) {
   });
 
   const withBars = withBarPercent(
-    days.map((d) => ({ ...d, painScore: d.painAvg || 0, lochiaNum: d.lochiaCount })),
-    ['painScore', 'lochiaNum']
+    days.map((d) => ({
+      ...d,
+      painScore: d.painAvg || 0,
+      lochiaNum: d.lochiaCount,
+      weightNum: d.weightValue || 0,
+      breastNum: d.breastSeverity || 0,
+    })),
+    ['painScore', 'lochiaNum', 'weightNum', 'breastNum']
   );
   const enriched = withBars.map((d) => ({
     ...d,
@@ -244,12 +280,28 @@ function buildMomStats(momRecords, birthDate) {
         emoji: d.moodEmoji,
         isMood: true,
       },
+      {
+        icon: '⚖️',
+        label: '体重',
+        value: d.weightDetail,
+        barPercent: d.weightValue != null ? d.weightNumBar : 0,
+        color: '#6b9fd4',
+      },
+      {
+        icon: '🤱',
+        label: '乳房护理',
+        value: d.breastDetail,
+        barPercent: d.breastSeverity != null ? d.breastNumBar : 0,
+        color: '#e8a0c0',
+      },
     ],
   }));
   const chartDays = enriched.map((d) => ({
     ...d,
     painBar: d.painScoreBar,
     lochiaBar: d.lochiaNumBar,
+    weightBar: d.weightValue != null ? d.weightNumBar : 0,
+    breastBar: d.breastSeverity != null && d.breastSeverity > 0 ? d.breastNumBar : 0,
   }));
 
   const detailDays = [...enriched].reverse();

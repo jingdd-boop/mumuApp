@@ -40,6 +40,32 @@
   color: var(--color-text-tertiary);
 }
 
+.weight-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.weight-input {
+  flex: 1;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.weight-unit {
+  font-size: 28rpx;
+  color: var(--color-text-tertiary);
+  font-weight: 600;
+}
+
+.form-hint {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
+  line-height: 1.5;
+}
+
 .submit-bar {
   position: fixed;
   left: 0;

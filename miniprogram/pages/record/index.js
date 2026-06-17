@@ -13,6 +13,13 @@ Page({
     detailDays: [],
     hasTrendData: false,
     totalDays: 0,
+    addTypes: [
+      { type: 'lochia', icon: '💗', label: '恶露' },
+      { type: 'pain', icon: '🩹', label: '疼痛' },
+      { type: 'mood', icon: '💭', label: '情绪' },
+      { type: 'weight', icon: '⚖️', label: '体重' },
+      { type: 'breast', icon: '🤱', label: '乳房' },
+    ],
   },
 
   onShow() {

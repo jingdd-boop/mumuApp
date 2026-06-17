@@ -69,6 +69,87 @@
         </view>
       </view>
     </block>
+
+    <block wx:if="{{type === 'weight'}}">
+      <view class="form-item">
+        <text class="form-label">体重（kg）</text>
+        <view class="weight-input-wrap">
+          <input
+            class="input weight-input"
+            type="digit"
+            placeholder="如 58.5"
+            value="{{weightKg}}"
+            bindinput="onTextInput"
+            data-field="weightKg"
+          />
+          <text class="weight-unit">kg</text>
+        </view>
+        <text class="form-hint">建议每天固定时间测量，空腹或穿轻便衣物</text>
+      </view>
+      <view class="form-item">
+        <text class="form-label">备注（选填）</text>
+        <input class="input" placeholder="如：晨起空腹" value="{{weightNote}}" bindinput="onTextInput" data-field="weightNote" />
+      </view>
+    </block>
+
+    <block wx:if="{{type === 'breast'}}">
+      <view class="form-item">
+        <text class="form-label">涨奶情况</text>
+        <view class="tag-group">
+          <view
+            class="tag {{breastEngorgement === item.value ? 'active' : ''}}"
+            wx:for="{{engorgementLevels}}"
+            wx:key="value"
+            bindtap="onTagSelect"
+            data-field="breastEngorgement"
+            data-value="{{item.value}}"
+          >{{item.label}}</view>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="form-label">堵奶情况</text>
+        <view class="tag-group">
+          <view
+            class="tag {{breastBlocked === item.value ? 'active' : ''}}"
+            wx:for="{{blockedStatus}}"
+            wx:key="value"
+            bindtap="onTagSelect"
+            data-field="breastBlocked"
+            data-value="{{item.value}}"
+          >{{item.label}}</view>
+        </view>
+      </view>
+      <view class="form-item" wx:if="{{breastBlocked === 'yes'}}">
+        <text class="form-label">堵奶位置</text>
+        <view class="tag-group">
+          <view
+            class="tag {{breastSide === item.value ? 'active' : ''}}"
+            wx:for="{{breastSides}}"
+            wx:key="value"
+            bindtap="onTagSelect"
+            data-field="breastSide"
+            data-value="{{item.value}}"
+          >{{item.label}}</view>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="form-label">哺乳情况</text>
+        <view class="tag-group">
+          <view
+            class="tag {{breastFeeding === item.value ? 'active' : ''}}"
+            wx:for="{{feedingStatus}}"
+            wx:key="value"
+            bindtap="onTagSelect"
+            data-field="breastFeeding"
+            data-value="{{item.value}}"
+          >{{item.label}}</view>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="form-label">备注（选填）</text>
+        <input class="input" placeholder="如：热敷后缓解、乳头疼痛等" value="{{breastNote}}" bindinput="onTextInput" data-field="breastNote" />
+      </view>
+    </block>
   </view>
 
   <view class="submit-bar">

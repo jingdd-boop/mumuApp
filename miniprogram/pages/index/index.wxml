@@ -34,17 +34,25 @@
     <view class="card-title">记录一下</view>
     <view class="section-hint">选择类型，快速完成记录</view>
     <view class="quick-grid quick-grid-3">
-      <view class="quick-btn" bindtap="onQuickRecord" data-type="lochia">
+      <view class="quick-btn compact" bindtap="onQuickRecord" data-type="lochia">
         <view class="quick-icon-wrap"><text class="quick-icon">💗</text></view>
         <text class="quick-label">恶露</text>
       </view>
-      <view class="quick-btn" bindtap="onQuickRecord" data-type="pain">
+      <view class="quick-btn compact" bindtap="onQuickRecord" data-type="pain">
         <view class="quick-icon-wrap"><text class="quick-icon">🩹</text></view>
         <text class="quick-label">疼痛</text>
       </view>
-      <view class="quick-btn" bindtap="onQuickRecord" data-type="mood">
+      <view class="quick-btn compact" bindtap="onQuickRecord" data-type="mood">
         <view class="quick-icon-wrap"><text class="quick-icon">💭</text></view>
         <text class="quick-label">情绪</text>
+      </view>
+      <view class="quick-btn compact" bindtap="onQuickRecord" data-type="weight">
+        <view class="quick-icon-wrap"><text class="quick-icon">⚖️</text></view>
+        <text class="quick-label">体重</text>
+      </view>
+      <view class="quick-btn compact" bindtap="onQuickRecord" data-type="breast">
+        <view class="quick-icon-wrap"><text class="quick-icon">🤱</text></view>
+        <text class="quick-label">乳房</text>
       </view>
     </view>
   </view>
