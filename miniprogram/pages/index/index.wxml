@@ -1,29 +1,81 @@
-<!--index.wxml-->
+<page-header title="你好，{{nickName}} 👋" subtitle="月子第 {{confinement.day}} 天 · 欢迎回来" />
 <view class="container">
-  <view class="title">快速了解云开发</view>
-  <view class="top_tip">免鉴权接口调用 免部署后台 高并发</view>
-  <view class="power" wx:key="title" wx:for="{{powerList}}" wx:for-item="power">
-    <view class="power_info" data-index="{{index}}" data-type="{{ power.type }}" bindtap="onClickPowerInfo">
-      <view class="power_info_text">
-        <view class="power_info_text_title">
-          {{power.title}}
-          <view class="power_info_text_tag" wx:if="{{power.tag}}">{{power.tag}}</view>
-        </view>
-        <view class="power_info_text_tip">{{power.tip}}</view>
-      </view>
-      <image wx:if="{{!power.showItem && power.item.length}}" class="power_info_more" src="../../images/arrow.svg"></image>
-      <image wx:if="{{power.showItem && power.item.length}}" class="power_info_less" src="../../images/arrow.svg"></image>
-      <image wx:if="{{!power.item.length}}" class="power_item_icon" src="../../images/arrow.svg"></image>
+  <view class="hero-card">
+    <view class="hero-deco hero-deco-1"></view>
+    <view class="hero-deco hero-deco-2"></view>
+    <view class="hero-deco hero-deco-3"></view>
+    <text class="hero-label">月子进度</text>
+    <view class="hero-day-row">
+      <text class="day-num">{{confinement.day}}</text>
+      <text class="day-total">/ {{confinement.total}} 天</text>
     </view>
-    <view wx:if="{{power.showItem}}">
-      <view wx:key="title" wx:for="{{power.item}}">
-        <view class="line"></view>
-        <view class="power_item" bindtap="jumpPage" data-type="{{ item.type }}" data-page="{{item.page}}">
-          <view class="power_item_title">{{item.title}}</view>
-          <image class="power_item_icon" src="../../images/arrow.svg"></image>
+    <text class="stage-tag">{{confinement.stage.name}}</text>
+    <view class="progress-wrap">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{confinement.progress}}%"></view>
+      </view>
+      <text class="progress-text">{{confinement.progress}}%</text>
+    </view>
+    <view class="hero-entry" bindtap="goDailyGuide">
+      <view class="hero-entry-left">
+        <text class="hero-entry-icon">📋</text>
+        <view class="hero-entry-text">
+          <text class="hero-entry-title">{{deliveryLabel}} · 阶段注意事项</text>
+          <text class="hero-entry-sub">6 个阶段，自动匹配当前进度</text>
+        </view>
+      </view>
+      <view class="hero-entry-arrow">›</view>
+    </view>
+    <view wx:if="{{confinement.isEnded}}" class="ended-tip">月子期已结束，继续记录身体恢复吧</view>
+  </view>
+
+  <view class="card card-action">
+    <text class="card-eyebrow">QUICK LOG</text>
+    <view class="card-title">记录一下</view>
+    <view class="section-hint">选择类型，快速完成记录</view>
+    <view class="quick-grid quick-grid-3">
+      <view class="quick-btn" bindtap="onQuickRecord" data-type="lochia">
+        <view class="quick-icon-wrap"><text class="quick-icon">💗</text></view>
+        <text class="quick-label">恶露</text>
+      </view>
+      <view class="quick-btn" bindtap="onQuickRecord" data-type="pain">
+        <view class="quick-icon-wrap"><text class="quick-icon">🩹</text></view>
+        <text class="quick-label">疼痛</text>
+      </view>
+      <view class="quick-btn" bindtap="onQuickRecord" data-type="mood">
+        <view class="quick-icon-wrap"><text class="quick-icon">💭</text></view>
+        <text class="quick-label">情绪</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <text class="card-eyebrow">TODAY</text>
+    <view class="card-title">今日建议</view>
+    <view class="tip-item" wx:for="{{tips}}" wx:key="*this">
+      <view class="tip-dot"></view>
+      <text>{{item}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-header">
+      <view>
+        <text class="card-eyebrow">TIMELINE</text>
+        <view class="card-title" style="margin-bottom:0">今日记录</view>
+      </view>
+      <view class="card-link-pill" bindtap="goRecord">全部 ›</view>
+    </view>
+    <view wx:if="{{timeline.length === 0}}" class="empty-tip">今天还没有记录</view>
+    <view class="timeline-item" wx:for="{{timeline}}" wx:key="id">
+      <view class="timeline-time">{{item.time}}</view>
+      <view class="timeline-bubble">
+        <view class="timeline-icon-wrap"><text class="timeline-icon">{{item.icon}}</text></view>
+        <view class="timeline-text">
+          <text class="timeline-title">{{item.title}}</text>
+          <text class="timeline-detail">{{item.detail}}</text>
         </view>
       </view>
     </view>
   </view>
-  <cloud-tip-modal showTipProps="{{showTip}}" title="{{title}}" content="{{content}}"></cloud-tip-modal>
 </view>

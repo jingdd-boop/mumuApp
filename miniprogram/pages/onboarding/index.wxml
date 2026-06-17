@@ -1,0 +1,66 @@
+<page-header title="初始设置" />
+<view class="container onboarding">
+  <view class="header">
+    <text class="title">欢迎来到沐沐记</text>
+    <text class="subtitle">填写基本信息，开始记录你的月子恢复</text>
+  </view>
+
+  <view class="card">
+    <view class="form-item">
+      <text class="form-label">你的称呼</text>
+      <input class="input" placeholder="如：沐沐、小雨" value="{{nickName}}" bindinput="onNameInput" maxlength="20" />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">生产日期</text>
+      <picker mode="date" value="{{deliveryDate}}" end="{{today}}" bindchange="onDeliveryDateChange">
+        <view class="picker-value">{{deliveryDate || '请选择生产日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">月子天数</text>
+      <view class="tag-group">
+        <view
+          class="tag {{totalDays === item.value ? 'active' : ''}}"
+          wx:for="{{dayOptions}}"
+          wx:key="value"
+          bindtap="onDayChange"
+          data-value="{{item.value}}"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">分娩方式</text>
+      <view class="tag-group">
+        <view
+          class="tag {{deliveryType === item.value ? 'active' : ''}}"
+          wx:for="{{deliveryOptions}}"
+          wx:key="value"
+          bindtap="onDeliveryChange"
+          data-value="{{item.value}}"
+        >{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="agreement">
+    <checkbox-group bindchange="onDisclaimerChange">
+      <label class="agreement-item">
+        <checkbox value="1" checked="{{agreedDisclaimer}}" color="#7B5CF0" />
+        <text>我已阅读并同意</text>
+        <text class="link" catchtap="openDisclaimer">《免责声明》</text>
+      </label>
+    </checkbox-group>
+    <checkbox-group bindchange="onPrivacyChange">
+      <label class="agreement-item">
+        <checkbox value="1" checked="{{agreedPrivacy}}" color="#7B5CF0" />
+        <text>我已阅读并同意</text>
+        <text class="link" catchtap="openPrivacy">《隐私政策》</text>
+      </label>
+    </checkbox-group>
+  </view>
+
+  <button class="btn-primary submit-btn" bindtap="onSubmit">开始使用</button>
+</view>

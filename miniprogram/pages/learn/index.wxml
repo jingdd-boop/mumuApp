@@ -1,0 +1,62 @@
+<page-header title="知识" subtitle="月子恢复 · 科学养护" />
+<view class="container">
+  <!-- 今日推荐 -->
+  <view class="recommend-card" wx:if="{{recommended.length > 0}}">
+    <view class="recommend-head">
+      <text class="recommend-eyebrow">FOR YOU</text>
+      <text class="recommend-title">月子第 {{confinementDay}} 天 · {{stageName}}</text>
+      <text class="recommend-sub">为你精选的恢复知识</text>
+    </view>
+    <view
+      class="recommend-item"
+      wx:for="{{recommended}}"
+      wx:key="id"
+      bindtap="onOpenArticle"
+      data-id="{{item.id}}"
+    >
+      <view class="recommend-icon-wrap"><text>{{item.icon}}</text></view>
+      <view class="recommend-body">
+        <text class="recommend-item-title">{{item.title}}</text>
+        <text class="recommend-item-summary">{{item.summary}}</text>
+      </view>
+      <view class="recommend-arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 分类 -->
+  <scroll-view class="category-scroll" scroll-x enable-flex>
+    <view class="category-list">
+      <view
+        class="category-chip {{activeCategory === item.id ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        bindtap="onCategoryChange"
+        data-id="{{item.id}}"
+      >{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <!-- 文章列表 -->
+  <view class="article-list">
+    <view
+      class="article-card"
+      wx:for="{{articles}}"
+      wx:key="id"
+      bindtap="onOpenArticle"
+      data-id="{{item.id}}"
+    >
+      <view class="article-icon-wrap"><text class="article-icon">{{item.icon}}</text></view>
+      <view class="article-body">
+        <view class="article-meta">
+          <text class="article-category">{{item.categoryLabel}}</text>
+          <text class="article-time">{{item.readMinutes}} 分钟阅读</text>
+        </view>
+        <text class="article-title">{{item.title}}</text>
+        <text class="article-summary">{{item.summary}}</text>
+      </view>
+    </view>
+    <view wx:if="{{articles.length === 0}}" class="empty-tip">该分类暂无文章</view>
+  </view>
+
+  <view class="disclaimer-tip">以上内容仅供参考，不能替代医疗建议。如有不适请及时就医。</view>
+</view>

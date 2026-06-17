@@ -1,0 +1,77 @@
+<page-header title="{{pageTitle}}" show-back="{{true}}" />
+<view class="container">
+  <view class="card">
+    <view class="form-item">
+      <text class="form-label">时间</text>
+      <picker mode="time" value="{{time}}" bindchange="onTimeChange">
+        <view class="picker-value">{{time}}</view>
+      </picker>
+    </view>
+
+    <block wx:if="{{type === 'lochia'}}">
+      <view class="form-item">
+        <text class="form-label">颜色</text>
+        <view class="tag-group">
+          <view
+            class="tag {{lochiaColor === item.value ? 'active' : ''}}"
+            wx:for="{{lochiaColors}}"
+            wx:key="value"
+            bindtap="onTagSelect"
+            data-field="lochiaColor"
+            data-value="{{item.value}}"
+          >{{item.label}}</view>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="form-label">量</text>
+        <view class="tag-group">
+          <view
+            class="tag {{lochiaAmount === item.value ? 'active' : ''}}"
+            wx:for="{{lochiaAmounts}}"
+            wx:key="value"
+            bindtap="onTagSelect"
+            data-field="lochiaAmount"
+            data-value="{{item.value}}"
+          >{{item.label}}</view>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="form-label">备注（选填）</text>
+        <input class="input" placeholder="如有异常请描述" value="{{lochiaNote}}" bindinput="onTextInput" data-field="lochiaNote" />
+      </view>
+    </block>
+
+    <block wx:if="{{type === 'pain'}}">
+      <view class="form-item">
+        <text class="form-label">疼痛评分：{{painScore}} / 10</text>
+        <slider min="1" max="10" step="1" value="{{painScore}}" activeColor="#7B5CF0" block-color="#7B5CF0" bindchange="onPainChange" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">备注（选填）</text>
+        <input class="input" placeholder="如：伤口处、腰部" value="{{painNote}}" bindinput="onTextInput" data-field="painNote" />
+      </view>
+    </block>
+
+    <block wx:if="{{type === 'mood'}}">
+      <view class="form-item">
+        <text class="form-label">今日心情</text>
+        <view class="mood-grid">
+          <view
+            class="mood-item {{moodLevel === item.value ? 'active' : ''}}"
+            wx:for="{{moodLevels}}"
+            wx:key="value"
+            bindtap="onMoodSelect"
+            data-value="{{item.value}}"
+          >
+            <text class="mood-emoji">{{item.emoji}}</text>
+            <text class="mood-label">{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="submit-bar">
+    <button class="btn-primary submit-btn" bindtap="onSubmit">保存记录</button>
+  </view>
+</view>

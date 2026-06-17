@@ -1,0 +1,47 @@
+<page-header title="阶段注意事项" subtitle="{{deliveryLabel}} · 月子第 {{confinementDay}} 天" show-back="{{true}}" />
+<view class="container" wx:if="{{guide}}">
+  <view class="stage-grid">
+    <view
+      class="stage-chip {{currentIndex === item.index ? 'active' : ''}}"
+      wx:for="{{stages}}"
+      wx:key="index"
+      bindtap="onStageChange"
+      data-index="{{item.index}}"
+    >
+      <text class="stage-chip-label">{{item.stageLabel}}</text>
+      <text class="stage-chip-range">{{item.rangeLabel}}</text>
+    </view>
+  </view>
+
+  <view class="guide-card">
+    <view class="guide-badge">{{deliveryLabel}}专属</view>
+    <text class="guide-focus">{{guide.focus}}</text>
+    <text class="guide-range">{{guide.rangeLabel}} · {{guide.stageLabel}}</text>
+  </view>
+
+  <view class="section-card">
+    <text class="section-title">✅ 阶段护理</text>
+    <view class="guide-item" wx:for="{{guide.care}}" wx:key="*this">
+      <view class="guide-dot care"></view>
+      <text class="guide-text">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="section-card">
+    <text class="section-title">🚫 阶段避免</text>
+    <view class="guide-item" wx:for="{{guide.avoid}}" wx:key="*this">
+      <view class="guide-dot avoid"></view>
+      <text class="guide-text">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="section-card section-watch">
+    <text class="section-title">⚠️ 需要警惕</text>
+    <view class="guide-item" wx:for="{{guide.watch}}" wx:key="*this">
+      <view class="guide-dot watch"></view>
+      <text class="guide-text">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="disclaimer-tip">以上内容仅供参考，不能替代医疗建议。如有不适请及时就医。</view>
+</view>

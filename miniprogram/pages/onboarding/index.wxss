@@ -1,0 +1,45 @@
+.onboarding {
+  padding-bottom: 80rpx;
+}
+
+.header {
+  padding: 16rpx 0 36rpx;
+}
+
+.title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 12rpx;
+  letter-spacing: -0.5rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: var(--color-text-tertiary);
+  line-height: 1.5;
+}
+
+.agreement {
+  margin: 24rpx 0 48rpx;
+}
+
+.agreement-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  margin-bottom: 16rpx;
+  gap: 4rpx;
+}
+
+.link {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.submit-btn {
+  width: 100%;
+}

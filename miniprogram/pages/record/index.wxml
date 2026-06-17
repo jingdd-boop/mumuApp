@@ -1,0 +1,119 @@
+<page-header title="记录" subtitle="{{pageSubtitle}}" />
+<view class="container">
+  <view class="tabs">
+    <view class="tab {{viewTab === 'record' ? 'active' : ''}}" bindtap="switchView" data-tab="record">今日记录</view>
+    <view class="tab {{viewTab === 'trend' ? 'active' : ''}}" bindtap="switchView" data-tab="trend">数据趋势</view>
+  </view>
+
+  <!-- 今日记录 -->
+  <block wx:if="{{viewTab === 'record'}}">
+    <view class="add-section">
+      <view class="add-section-title">ADD NEW</view>
+      <view class="action-card" bindtap="onAdd" data-type="lochia">
+        <view class="action-card-icon-wrap"><text class="action-card-icon">💗</text></view>
+        <view class="action-card-body">
+          <text class="action-card-title">恶露</text>
+          <text class="action-card-hint">颜色、量等恢复情况</text>
+        </view>
+        <view class="action-card-arrow">›</view>
+      </view>
+      <view class="action-card" bindtap="onAdd" data-type="pain">
+        <view class="action-card-icon-wrap"><text class="action-card-icon">🩹</text></view>
+        <view class="action-card-body">
+          <text class="action-card-title">疼痛</text>
+          <text class="action-card-hint">伤口或身体不适程度</text>
+        </view>
+        <view class="action-card-arrow">›</view>
+      </view>
+      <view class="action-card" bindtap="onAdd" data-type="mood">
+        <view class="action-card-icon-wrap"><text class="action-card-icon">💭</text></view>
+        <view class="action-card-body">
+          <text class="action-card-title">情绪</text>
+          <text class="action-card-hint">今日心情怎么样</text>
+        </view>
+        <view class="action-card-arrow">›</view>
+      </view>
+    </view>
+
+    <view wx:if="{{records.length === 0}}" class="empty-tip">今天还没有记录，点上方按钮添加</view>
+    <view class="record-list" wx:else>
+      <view class="record-item" wx:for="{{records}}" wx:key="id">
+        <view class="record-main">
+          <view class="record-icon">{{item.icon}}</view>
+          <view class="record-info">
+            <text class="record-title">{{item.title}} · {{item.time}}</text>
+            <text class="record-detail">{{item.detail}}</text>
+          </view>
+        </view>
+        <view class="record-delete" bindtap="onDelete" data-id="{{item.id}}">删除</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 数据趋势 -->
+  <block wx:if="{{viewTab === 'trend'}}">
+    <view class="module-card">
+      <view class="module-header">
+        <view class="module-icon">🌸</view>
+        <view class="module-title-wrap">
+          <text class="module-title">身体恢复趋势</text>
+          <text class="module-sub">恶露 · 疼痛 · 情绪</text>
+        </view>
+      </view>
+
+      <view wx:if="{{!hasTrendData}}" class="empty-tip">还没有记录，切换到「今日记录」添加吧</view>
+
+      <block wx:else>
+        <view class="chart-section">
+          <view class="chart-title">OVERVIEW</view>
+          <scroll-view class="chart-scroll" scroll-x enable-flex>
+            <view class="chart-cols">
+              <view class="chart-col" wx:for="{{chartDays}}" wx:key="date">
+                <view class="chart-col-bars chart-col-bars-mom">
+                  <view class="chart-bar-wrap">
+                    <view class="chart-bar bar-lochia" style="height: {{item.lochiaBar}}%"></view>
+                  </view>
+                  <view class="chart-bar-wrap">
+                    <view class="chart-bar bar-pain" style="height: {{item.painBar}}%"></view>
+                  </view>
+                  <view class="chart-bar-wrap chart-mood-wrap">
+                    <text class="chart-mood-emoji">{{item.moodEmoji}}</text>
+                  </view>
+                </view>
+                <text class="chart-day-num">第{{item.dayIndex}}天</text>
+                <text class="chart-day-date">{{item.dateShort}}</text>
+              </view>
+            </view>
+          </scroll-view>
+          <view class="chart-legend">
+            <view class="legend-item"><view class="legend-dot bar-lochia"></view><text>💗 恶露记录</text></view>
+            <view class="legend-item"><view class="legend-dot bar-pain"></view><text>🩹 疼痛评分</text></view>
+            <view class="legend-item"><text>💭 情绪表情</text></view>
+          </view>
+        </view>
+
+        <view class="daily-section">
+          <view class="daily-title">DAILY DETAIL</view>
+          <view class="daily-card {{item.hasData ? '' : 'daily-card-empty'}}" wx:for="{{detailDays}}" wx:key="date">
+            <view class="daily-card-head">
+              <text class="daily-day">{{item.dayLabel}}</text>
+              <text class="daily-date">{{item.dateShort}}</text>
+            </view>
+            <view class="metric-row" wx:for="{{item.metrics}}" wx:for-item="metric" wx:key="label">
+              <view class="metric-icon">{{metric.isMood ? metric.emoji : metric.icon}}</view>
+              <view class="metric-body">
+                <view class="metric-top">
+                  <text class="metric-label">{{metric.label}}</text>
+                  <text class="metric-value">{{metric.value}}</text>
+                </view>
+                <view class="metric-bar-bg" wx:if="{{!metric.isMood}}">
+                  <view class="metric-bar-fill" style="width: {{metric.barPercent}}%; background: {{metric.color}}"></view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </block>
+</view>

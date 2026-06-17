@@ -1,0 +1,34 @@
+.legal {
+  padding-bottom: 60rpx;
+}
+
+.legal-date {
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+  margin-bottom: 40rpx;
+}
+
+.legal-section {
+  margin-bottom: 40rpx;
+}
+
+.legal-heading {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 16rpx;
+  letter-spacing: -0.3rpx;
+}
+
+.legal-text {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+}
+
+.legal-list {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  padding-left: 8rpx;
+}

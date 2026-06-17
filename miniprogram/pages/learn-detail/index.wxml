@@ -1,0 +1,21 @@
+<page-header title="{{article.title}}" show-back="{{true}}" />
+<view class="container" wx:if="{{article}}">
+  <view class="detail-card">
+    <view class="detail-head">
+      <view class="detail-icon-wrap"><text>{{article.icon}}</text></view>
+      <view class="detail-meta">
+        <text class="detail-category">{{categoryLabel}}</text>
+        <text class="detail-time">约 {{article.readMinutes}} 分钟阅读</text>
+      </view>
+    </view>
+    <text class="detail-summary">{{article.summary}}</text>
+    <view class="detail-divider"></view>
+    <view class="detail-content">
+      <view class="paragraph" wx:for="{{article.paragraphs}}" wx:key="*this">
+        <view class="paragraph-dot"></view>
+        <text class="paragraph-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="detail-footer">以上内容仅供参考，不能替代医疗建议。如有不适请及时就医。</view>
+</view>

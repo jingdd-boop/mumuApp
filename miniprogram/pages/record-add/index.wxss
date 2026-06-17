@@ -1,0 +1,55 @@
+.container {
+  padding-bottom: 180rpx;
+}
+
+.mood-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.mood-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28rpx 0;
+  background: linear-gradient(145deg, #f5f1fb, #ebe6f4);
+  border-radius: 28rpx;
+  border: none;
+  min-height: 140rpx;
+  box-shadow: var(--shadow-clay-sm);
+}
+
+.mood-item.active {
+  background: linear-gradient(135deg, #8b6fe8, #7b5cf0);
+  box-shadow: 0 12rpx 28rpx rgba(123, 92, 240, 0.38);
+}
+
+.mood-item.active .mood-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.mood-emoji {
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+}
+
+.mood-label {
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
+}
+
+.submit-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 24rpx 36rpx calc(24rpx + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(235, 230, 244, 0) 0%, #ebe6f4 50%);
+  z-index: 10;
+}
+
+.submit-btn {
+  width: 100%;
+}

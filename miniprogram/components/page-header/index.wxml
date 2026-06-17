@@ -1,0 +1,12 @@
+<view class="page-header" style="padding-top: {{statusBarHeight}}px">
+  <view class="nav-bar" style="height: {{navBarHeight}}px">
+    <view wx:if="{{showBack}}" class="back-btn" bindtap="onBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <view class="title-wrap">
+      <text class="nav-title">{{title}}</text>
+      <text wx:if="{{subtitle}}" class="nav-subtitle">{{subtitle}}</text>
+    </view>
+  </view>
+</view>
+<view class="header-placeholder" style="height: {{headerHeight}}px"></view>

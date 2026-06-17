@@ -1,0 +1,46 @@
+<page-header title="设置" show-back="{{true}}" />
+<view class="container">
+  <view class="card">
+    <view class="section-title">个人档案</view>
+    <view class="form-item">
+      <text class="form-label">你的称呼</text>
+      <input class="input" value="{{nickName}}" bindinput="onNameInput" maxlength="20" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">生产日期</text>
+      <picker mode="date" value="{{deliveryDate}}" end="{{today}}" bindchange="onDeliveryDateChange">
+        <view class="picker-value">{{deliveryDate || '请选择'}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">月子设置</view>
+    <view class="form-item">
+      <text class="form-label">月子天数</text>
+      <view class="tag-group">
+        <view
+          class="tag {{totalDays === item.value ? 'active' : ''}}"
+          wx:for="{{dayOptions}}"
+          wx:key="value"
+          bindtap="onDayChange"
+          data-value="{{item.value}}"
+        >{{item.label}}</view>
+      </view>
+    </view>
+    <view class="form-item">
+      <text class="form-label">分娩方式</text>
+      <view class="tag-group">
+        <view
+          class="tag {{deliveryType === item.value ? 'active' : ''}}"
+          wx:for="{{deliveryOptions}}"
+          wx:key="value"
+          bindtap="onDeliveryChange"
+          data-value="{{item.value}}"
+        >{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <button class="btn-primary submit-btn" bindtap="onSave">保存设置</button>
+</view>

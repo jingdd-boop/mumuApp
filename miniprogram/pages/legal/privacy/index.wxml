@@ -1,0 +1,55 @@
+<page-header title="隐私政策" show-back="{{true}}" />
+<view class="container legal">
+  <view class="legal-date">更新日期：2026年6月17日</view>
+
+  <view class="legal-section">
+    <view class="legal-heading">一、概述</view>
+    <view class="legal-text">「沐沐记」（以下简称"本小程序"）尊重并保护用户隐私。本政策说明我们如何收集、使用、存储和保护您的个人信息。</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">二、我们收集的信息</view>
+    <view class="legal-text">为提供核心功能，我们可能收集以下信息：</view>
+    <view class="legal-list">· 微信登录标识（openid，用于账号识别）</view>
+    <view class="legal-list">· 个人档案信息（称呼、生产日期）</view>
+    <view class="legal-list">· 月子设置（月子天数、分娩方式）</view>
+    <view class="legal-list">· 您主动录入的记录（恶露、疼痛、情绪等身体恢复数据）</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">三、信息的使用</view>
+    <view class="legal-text">收集的信息仅用于：</view>
+    <view class="legal-list">· 提供月子天数计算、记录管理与数据展示</view>
+    <view class="legal-list">· 改善产品体验与功能优化</view>
+    <view class="legal-list">· 保障服务安全与正常运行</view>
+    <view class="legal-text">我们不会将您的个人信息出售给第三方。</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">四、信息存储</view>
+    <view class="legal-text">MVP 版本中，您的数据主要存储在设备本地（微信本地缓存）。后续版本可能同步至微信云开发服务器，届时将更新本政策并征得您的同意。数据存储于中华人民共和国境内。</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">五、您的权利</view>
+    <view class="legal-text">您有权：</view>
+    <view class="legal-list">· 在「设置」中修改个人档案和月子设置</view>
+    <view class="legal-list">· 在「我的」中清除所有本地数据</view>
+    <view class="legal-list">· 通过意见反馈联系我们，要求删除云端数据（如云同步功能上线后）</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">六、未成年人保护</view>
+    <view class="legal-text">本小程序面向产后妈妈。我们不会主动收集与服务无关的个人信息。</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">七、政策更新</view>
+    <view class="legal-text">我们可能适时修订本政策。重大变更将在小程序内通知您。继续使用本小程序即表示您同意更新后的政策。</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">八、联系我们</view>
+    <view class="legal-text">如对本隐私政策有任何疑问，请通过小程序内「意见反馈」功能与我们联系。</view>
+  </view>
+</view>

@@ -1,0 +1,38 @@
+<page-header title="免责声明" show-back="{{true}}" />
+<view class="container legal">
+  <view class="legal-date">更新日期：2026年6月17日</view>
+
+  <view class="legal-section">
+    <view class="legal-heading">一、服务性质</view>
+    <view class="legal-text">「沐沐记」是一款面向产后家庭的生活记录与信息参考工具。本小程序提供的月子天数计算、每日建议、记录功能及文章内容，均仅供一般性参考，不构成任何医疗诊断、治疗建议或处方。</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">二、非医疗建议</view>
+    <view class="legal-text">本小程序不对任何健康问题作出诊断或提供治疗方案。如出现以下情况，请立即就医：</view>
+    <view class="legal-list">· 持续高热（体温 ≥ 38.5°C）</view>
+    <view class="legal-list">· 大量或异常出血</view>
+    <view class="legal-list">· 严重伤口红肿、化脓或剧烈疼痛</view>
+    <view class="legal-list">· 持续情绪低落或有自伤念头</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">三、内容准确性</view>
+    <view class="legal-text">我们尽力确保内容的科学性与时效性，但不保证内容的完整、准确或适用于每个个体。不同体质、分娩方式及医疗条件存在差异，请以专业医疗机构的意见为准。</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">四、用户记录数据</view>
+    <view class="legal-text">您在本小程序中录入的喂养、睡眠、身体恢复等记录，仅为个人生活备忘用途。我们不对基于这些记录做出的任何判断或决策承担责任。</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">五、责任限制</view>
+    <view class="legal-text">在法律允许的最大范围内，因使用或无法使用本小程序而产生的任何直接、间接、附带或后果性损害，开发者不承担赔偿责任。</view>
+  </view>
+
+  <view class="legal-section">
+    <view class="legal-heading">六、联系方式</view>
+    <view class="legal-text">如对本声明有疑问，请通过小程序内「意见反馈」功能与我们联系。</view>
+  </view>
+</view>

@@ -1,27 +1,253 @@
-/**app.wxss**/
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+page {
+  --color-bg: #ebe6f4;
+  --color-bg-soft: #f3effa;
+  --color-surface: #f7f4fc;
+  --color-surface-raised: #faf8ff;
+  --color-text: #2d2640;
+  --color-text-secondary: #7a7189;
+  --color-text-tertiary: #a59db8;
+  --color-accent: #7b5cf0;
+  --color-accent-deep: #6b4fd4;
+  --color-accent-warm: #ff9f5a;
+  --color-accent-warm-deep: #ff8a45;
+  --color-primary: #7b5cf0;
+  --color-primary-light: #ede8f8;
+  --color-border: transparent;
+  --color-border-light: rgba(255, 255, 255, 0.6);
+  --shadow-clay: 14rpx 14rpx 28rpx rgba(163, 148, 191, 0.32), -10rpx -10rpx 24rpx rgba(255, 255, 255, 0.95);
+  --shadow-clay-sm: 8rpx 8rpx 20rpx rgba(163, 148, 191, 0.24), -6rpx -6rpx 16rpx rgba(255, 255, 255, 0.92);
+  --shadow-clay-lg: 20rpx 24rpx 48rpx rgba(107, 79, 212, 0.28);
+  --shadow-inset: inset 5rpx 5rpx 12rpx rgba(163, 148, 191, 0.2), inset -5rpx -5rpx 12rpx rgba(255, 255, 255, 0.88);
+  --radius-sm: 20rpx;
+  --radius-md: 32rpx;
+  --radius-card: 40rpx;
+  --radius-btn: 999rpx;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Rounded', 'Helvetica Neue', sans-serif;
+  background: linear-gradient(165deg, #ebe6f4 0%, #f5f0fc 45%, #e9e4f2 100%);
+  color: var(--color-text);
   box-sizing: border-box;
-} 
-
-button {
-  background: initial;
+  min-height: 100vh;
 }
 
-button:focus{
-  outline: 0;
+.container {
+  padding: 8rpx 36rpx 56rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+  margin-top: 60rpx;
 }
 
-button::after{
+.card {
+  background: linear-gradient(145deg, #faf8ff 0%, #f3eef9 100%);
+  border-radius: var(--radius-card);
+  padding: 36rpx;
+  margin-bottom: 24rpx;
+  box-shadow: var(--shadow-clay);
+  border: 2rpx solid rgba(255, 255, 255, 0.65);
+}
+
+.card-eyebrow {
+  display: block;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 2rpx;
+  margin-bottom: 8rpx;
+  opacity: 0.85;
+}
+
+.card-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 24rpx;
+  letter-spacing: -0.5rpx;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ffb86a 0%, #ff9f5a 45%, #ff8a45 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 32rpx;
+  font-weight: 600;
+  height: 104rpx;
+  line-height: 104rpx;
+  text-align: center;
+  box-shadow: 0 16rpx 36rpx rgba(255, 143, 90, 0.42), inset 0 2rpx 0 rgba(255, 255, 255, 0.35);
+}
+
+.btn-primary::after {
   border: none;
 }
 
+.btn-primary:active {
+  transform: scale(0.98);
+  box-shadow: 0 8rpx 20rpx rgba(255, 143, 90, 0.3);
+}
 
-page {
-  background: #f6f6f6;
+.btn-secondary {
+  background: linear-gradient(145deg, #faf8ff, #f0ebf8);
+  color: var(--color-text);
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 28rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  box-shadow: var(--shadow-clay-sm);
+}
+
+.btn-secondary::after {
+  border: none;
+}
+
+.empty-tip {
+  text-align: center;
+  color: var(--color-text-tertiary);
+  font-size: 28rpx;
+  padding: 64rpx 24rpx;
+  line-height: 1.6;
+}
+
+.form-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.form-item {
+  margin-bottom: 36rpx;
+}
+
+.picker-value,
+.input {
+  background: linear-gradient(145deg, #f0ebf8, #e8e2f2);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 28rpx 32rpx;
+  font-size: 30rpx;
+  color: var(--color-text);
+  box-shadow: var(--shadow-inset);
+}
+
+.tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.tag {
+  padding: 22rpx 32rpx;
+  border-radius: var(--radius-btn);
+  font-size: 28rpx;
+  background: linear-gradient(145deg, #f5f1fb, #ebe6f4);
+  color: var(--color-text-secondary);
+  border: none;
+  min-height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-clay-sm);
+}
+
+.tag.active {
+  background: linear-gradient(135deg, #8b6fe8, #7b5cf0);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 10rpx 28rpx rgba(123, 92, 240, 0.38);
+}
+
+.action-card {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 28rpx 32rpx;
+  background: linear-gradient(145deg, #ffffff 0%, #f8f4ff 100%);
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-md);
+  margin-bottom: 16rpx;
+  box-shadow: var(--shadow-clay-sm);
+}
+
+.action-card:active {
+  box-shadow: var(--shadow-inset);
+  transform: scale(0.99);
+}
+
+.action-card-icon-wrap {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 28rpx;
+  background: linear-gradient(145deg, #f0ebf8, #e4ddf0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-inset);
+}
+
+.action-card-icon {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.action-card-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  gap: 6rpx;
+  min-width: 0;
+}
+
+.action-card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.action-card-hint {
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+  line-height: 1.4;
+}
+
+.action-card-arrow {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffb86a, #ff9f5a);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8rpx 20rpx rgba(255, 159, 90, 0.4);
+}
+
+.section-hint {
+  font-size: 26rpx;
+  color: var(--color-text-tertiary);
+  margin: -8rpx 0 28rpx;
+  line-height: 1.5;
+}
+
+.text-link {
+  color: var(--color-accent);
+  font-size: 26rpx;
+  font-weight: 600;
+}
+
+.clay-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 12rpx 24rpx;
+  border-radius: var(--radius-btn);
+  background: linear-gradient(145deg, #faf8ff, #f0ebf8);
+  box-shadow: var(--shadow-clay-sm);
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
 }

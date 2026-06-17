@@ -1,14 +1,56 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/example/index"
+    "pages/record/index",
+    "pages/learn/index",
+    "pages/mine/index",
+    "pages/onboarding/index",
+    "pages/record-add/index",
+    "pages/daily-guide/index",
+    "pages/learn-detail/index",
+    "pages/settings/index",
+    "pages/legal/disclaimer/index",
+    "pages/legal/privacy/index"
   ],
   "window": {
-    "backgroundColor": "#F6F6F6",
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "云开发 QuickStart",
-    "navigationBarTextStyle": "black"
+    "backgroundColor": "#EBE6F4",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#EBE6F4",
+    "navigationBarTitleText": "沐沐记",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "tabBar": {
+    "color": "#A59DB8",
+    "selectedColor": "#7B5CF0",
+    "backgroundColor": "#F7F4FC",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tab/home.png",
+        "selectedIconPath": "images/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/record/index",
+        "text": "记录",
+        "iconPath": "images/tab/record.png",
+        "selectedIconPath": "images/tab/record-active.png"
+      },
+      {
+        "pagePath": "pages/learn/index",
+        "text": "知识",
+        "iconPath": "images/tab/learn.png",
+        "selectedIconPath": "images/tab/learn-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "images/tab/mine.png",
+        "selectedIconPath": "images/tab/mine-active.png"
+      }
+    ]
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2",
