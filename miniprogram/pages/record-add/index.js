@@ -1,4 +1,4 @@
-const storage = require('../../utils/storage');
+const api = require('../../utils/api');
 const confinement = require('../../utils/confinement');
 const recordUtil = require('../../utils/record');
 
@@ -85,12 +85,24 @@ Page({
         return;
       }
     }
+
     const date = confinement.todayStr();
     const payload = this.buildPayload();
-    storage.addMomRecord({ type, date, time, payload });
 
-    wx.showToast({ title: '记录成功', icon: 'success' });
-    setTimeout(() => wx.navigateBack(), 600);
+    wx.showLoading({ title: '保存中' });
+    getApp()
+      .ensureLogin()
+      .then(() => api.createMomRecord({ type, date, time, payload }))
+      .then(() => {
+        wx.showToast({ title: '记录成功', icon: 'success' });
+        setTimeout(() => wx.navigateBack(), 600);
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '保存失败', icon: 'none' });
+      })
+      .then(() => {
+        wx.hideLoading();
+      });
   },
 
   buildPayload() {

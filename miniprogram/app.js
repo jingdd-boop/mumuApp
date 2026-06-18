@@ -1,66 +1,95 @@
-const storage = require('./utils/storage');
+const api = require('./utils/api');
 
 App({
   globalData: {
-    env: '',
     user: null,
     mom: null,
     settings: null,
+    onboarded: false,
   },
 
   onLaunch() {
-    if (!wx.cloud) {
-      console.error('请使用 2.2.3 或以上的基础库以使用云能力');
-    } else {
-      wx.cloud.init({
-        env: this.globalData.env,
-        traceUser: true,
-      });
+    this._loginPromise = null;
+    this.ensureLogin().catch((err) => {
+      console.error('登录失败', err);
+    });
+  },
+
+  ensureLogin() {
+    if (this._loginPromise) return this._loginPromise;
+    this._loginPromise = this._doEnsureLogin();
+    this._loginPromise.catch(() => {
+      this._loginPromise = null;
+    });
+    return this._loginPromise;
+  },
+
+  _doEnsureLogin() {
+    const token = api.getToken();
+    if (token) {
+      return api
+        .getMe()
+        .then((user) => {
+          this.globalData.user = user;
+          return { token, user };
+        })
+        .catch(() => {
+          api.clearToken();
+          return this._wxLogin();
+        });
     }
-    this.loadLocalData();
-    this.login();
+    return this._wxLogin();
   },
 
-  loadLocalData() {
-    this.globalData.user = storage.getUser();
-    this.globalData.mom = storage.getMom();
-    this.globalData.settings = storage.getSettings();
-  },
-
-  login() {
-    wx.login({
-      success: () => {
-        const user = storage.getUser() || {};
-        if (!user.loginTime) {
-          storage.saveUser({ ...user, loginTime: Date.now() });
-          this.globalData.user = storage.getUser();
-        }
-        if (this.globalData.env) {
-          wx.cloud
-            .callFunction({ name: 'quickstartFunctions', data: { type: 'getOpenId' } })
-            .then((res) => {
-              if (res.result && res.result.openid) {
-                const u = { ...storage.getUser(), openid: res.result.openid };
-                storage.saveUser(u);
-                this.globalData.user = u;
-              }
+  _wxLogin() {
+    return new Promise((resolve, reject) => {
+      wx.login({
+        success: (res) => {
+          if (!res.code) {
+            reject(new Error('获取登录凭证失败'));
+            return;
+          }
+          api
+            .login(res.code)
+            .then((data) => {
+              api.setToken(data.token);
+              this.globalData.user = data.user;
+              resolve(data);
             })
-            .catch(() => {});
-        }
-      },
+            .catch(reject);
+        },
+        fail: reject,
+      });
     });
   },
 
   refreshGlobalData() {
-    this.loadLocalData();
+    return this.ensureLogin()
+      .then(() => api.getProfileStatus())
+      .then((status) => {
+        this.globalData.mom = status.mom;
+        this.globalData.settings = status.settings;
+        this.globalData.onboarded = status.onboarded;
+        return status;
+      });
   },
 
   checkOnboarding() {
-    const mom = storage.getMom();
-    if (!storage.isOnboarded() || !mom || !mom.deliveryDate) {
-      wx.reLaunch({ url: '/pages/onboarding/index' });
-      return false;
-    }
-    return true;
+    return this.ensureLogin()
+      .then(() => api.getProfileStatus())
+      .then((status) => {
+        this.globalData.mom = status.mom;
+        this.globalData.settings = status.settings;
+        this.globalData.onboarded = status.onboarded;
+        if (!status.onboarded || !status.mom || !status.mom.deliveryDate) {
+          wx.reLaunch({ url: '/pages/onboarding/index' });
+          return false;
+        }
+        return true;
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '加载失败', icon: 'none' });
+        return false;
+      });
   },
 });

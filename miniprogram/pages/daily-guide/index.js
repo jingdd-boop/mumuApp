@@ -1,6 +1,4 @@
-const storage = require('../../utils/storage');
-const confinement = require('../../utils/confinement');
-const deliveryGuide = require('../../utils/delivery-guide');
+const api = require('../../utils/api');
 
 Page({
   data: {
@@ -9,30 +7,37 @@ Page({
     currentIndex: 0,
     deliveryLabel: '',
     confinementDay: 1,
+    deliveryType: 'natural',
   },
 
   onLoad() {
-    const mom = storage.getMom();
-    const settings = storage.getSettings();
-    const info = confinement.getConfinementDay(mom.deliveryDate, settings.totalDays);
-    const deliveryType = settings.deliveryType || 'natural';
-    const currentIndex = deliveryGuide.getStageIndexByDay(info.day);
-    const stages = deliveryGuide.getStages(deliveryType);
-    const guide = deliveryGuide.getStageGuide(deliveryType, currentIndex);
-
-    this.setData({
-      guide,
-      stages,
-      currentIndex,
-      confinementDay: info.day,
-      deliveryLabel: guide.deliveryLabel,
-    });
+    getApp()
+      .ensureLogin()
+      .then(() => api.getDeliveryGuide())
+      .then((data) => {
+        const guide = data.guide || {};
+        this.setData({
+          guide: data.guide,
+          stages: data.stages || [],
+          currentIndex: data.currentIndex || 0,
+          confinementDay: data.confinementDay || 1,
+          deliveryLabel: data.deliveryLabel || '',
+          deliveryType: guide.deliveryType || 'natural',
+        });
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '加载失败', icon: 'none' });
+      });
   },
 
   onStageChange(e) {
     const index = Number(e.currentTarget.dataset.index);
-    const settings = storage.getSettings();
-    const guide = deliveryGuide.getStageGuide(settings.deliveryType, index);
+    const stage = this.data.stages[index];
+    if (!stage) return;
+    const guide = Object.assign({}, stage, {
+      deliveryLabel: this.data.deliveryLabel,
+      deliveryType: this.data.deliveryType,
+    });
     this.setData({ guide, currentIndex: index });
     wx.pageScrollTo({ scrollTop: 0, duration: 200 });
   },

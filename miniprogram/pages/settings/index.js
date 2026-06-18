@@ -1,4 +1,5 @@
-const storage = require('../../utils/storage');
+const api = require('../../utils/api');
+const confinement = require('../../utils/confinement');
 
 Page({
   data: {
@@ -19,16 +20,23 @@ Page({
   },
 
   onLoad() {
-    const confinement = require('../../utils/confinement');
-    const mom = storage.getMom() || {};
-    const settings = storage.getSettings();
-    this.setData({
-      nickName: mom.nickName || '',
-      deliveryDate: mom.deliveryDate || '',
-      totalDays: settings.totalDays || 42,
-      deliveryType: settings.deliveryType || 'natural',
-      today: confinement.todayStr(),
-    });
+    this.setData({ today: confinement.todayStr() });
+    getApp()
+      .ensureLogin()
+      .then(() => api.getProfileStatus())
+      .then((status) => {
+        const mom = status.mom || {};
+        const settings = status.settings || {};
+        this.setData({
+          nickName: mom.nickName || '',
+          deliveryDate: mom.deliveryDate || '',
+          totalDays: settings.totalDays || 42,
+          deliveryType: settings.deliveryType || 'natural',
+        });
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '加载失败', icon: 'none' });
+      });
   },
 
   onNameInput(e) {
@@ -58,16 +66,21 @@ Page({
       return;
     }
 
-    const existing = storage.getMom() || {};
-    storage.saveMom({
-      ...existing,
-      nickName: nickName.trim(),
-      deliveryDate,
-    });
-    storage.saveSettings({ totalDays, deliveryType });
-    getApp().refreshGlobalData();
-
-    wx.showToast({ title: '保存成功', icon: 'success' });
-    setTimeout(() => wx.navigateBack(), 600);
+    wx.showLoading({ title: '保存中' });
+    Promise.all([
+      api.putMom({ nickName: nickName.trim(), deliveryDate }),
+      api.putSettings({ totalDays, deliveryType }),
+    ])
+      .then(() => getApp().refreshGlobalData())
+      .then(() => {
+        wx.showToast({ title: '保存成功', icon: 'success' });
+        setTimeout(() => wx.navigateBack(), 600);
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '保存失败', icon: 'none' });
+      })
+      .then(() => {
+        wx.hideLoading();
+      });
   },
 });

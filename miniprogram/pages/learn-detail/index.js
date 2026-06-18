@@ -1,4 +1,4 @@
-const knowledge = require('../../utils/knowledge');
+const api = require('../../utils/api');
 
 Page({
   data: {
@@ -7,16 +7,24 @@ Page({
   },
 
   onLoad(options) {
-    const article = knowledge.getArticleById(options.id);
-    if (!article) {
+    if (!options.id) {
       wx.showToast({ title: '文章不存在', icon: 'none' });
       setTimeout(() => wx.navigateBack(), 800);
       return;
     }
-    wx.setNavigationBarTitle({ title: article.title });
-    this.setData({
-      article,
-      categoryLabel: knowledge.getCategoryLabel(article.category),
-    });
+
+    api
+      .getKnowledgeArticle(options.id)
+      .then((article) => {
+        wx.setNavigationBarTitle({ title: article.title });
+        this.setData({
+          article,
+          categoryLabel: article.categoryLabel || '',
+        });
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '文章不存在', icon: 'none' });
+        setTimeout(() => wx.navigateBack(), 800);
+      });
   },
 });

@@ -1,4 +1,4 @@
-const storage = require('../../utils/storage');
+const api = require('../../utils/api');
 const confinement = require('../../utils/confinement');
 
 Page({
@@ -22,16 +22,22 @@ Page({
   },
 
   onLoad() {
-    const mom = storage.getMom();
-    if (mom) {
-      const settings = storage.getSettings();
-      this.setData({
-        nickName: mom.nickName || '',
-        deliveryDate: mom.deliveryDate || '',
-        totalDays: settings.totalDays || 42,
-        deliveryType: settings.deliveryType || 'natural',
+    getApp()
+      .ensureLogin()
+      .then(() => api.getProfileStatus())
+      .then((status) => {
+        if (!status.mom) return;
+        const settings = status.settings || {};
+        this.setData({
+          nickName: status.mom.nickName || '',
+          deliveryDate: status.mom.deliveryDate || '',
+          totalDays: settings.totalDays || 42,
+          deliveryType: settings.deliveryType || 'natural',
+        });
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '加载失败', icon: 'none' });
       });
-    }
   },
 
   onNameInput(e) {
@@ -81,27 +87,31 @@ Page({
       return;
     }
 
-    storage.saveMom({
-      id: storage.getMom()?.id || storage.genId(),
-      nickName: nickName.trim(),
-      deliveryDate,
-      createTime: Date.now(),
-    });
-    storage.saveSettings({ totalDays, deliveryType });
-    storage.setOnboarded(true);
-
-    const user = storage.getUser() || {};
-    storage.saveUser({
-      ...user,
-      agreedDisclaimer: true,
-      agreedPrivacy: true,
-      agreedTime: Date.now(),
-    });
-
-    getApp().refreshGlobalData();
-    wx.showToast({ title: '设置成功', icon: 'success' });
-    setTimeout(() => {
-      wx.switchTab({ url: '/pages/index/index' });
-    }, 800);
+    wx.showLoading({ title: '保存中' });
+    getApp()
+      .ensureLogin()
+      .then(() =>
+        api.postOnboarding({
+          nickName: nickName.trim(),
+          deliveryDate,
+          totalDays,
+          deliveryType,
+          agreedDisclaimer,
+          agreedPrivacy,
+        })
+      )
+      .then(() => getApp().refreshGlobalData())
+      .then(() => {
+        wx.showToast({ title: '设置成功', icon: 'success' });
+        setTimeout(() => {
+          wx.switchTab({ url: '/pages/index/index' });
+        }, 800);
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '保存失败', icon: 'none' });
+      })
+      .then(() => {
+        wx.hideLoading();
+      });
   },
 });

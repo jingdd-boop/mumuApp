@@ -1,7 +1,5 @@
-const storage = require('../../utils/storage');
+const api = require('../../utils/api');
 const confinement = require('../../utils/confinement');
-const recordUtil = require('../../utils/record');
-const statsUtil = require('../../utils/stats');
 
 Page({
   data: {
@@ -23,36 +21,34 @@ Page({
   },
 
   onShow() {
-    const app = getApp();
-    if (!app.checkOnboarding()) return;
-    this.loadData();
+    getApp().checkOnboarding().then((ok) => {
+      if (!ok) return;
+      this.loadData();
+    });
   },
 
   loadData() {
     const today = confinement.todayStr();
-    const records = storage.getRecordsByDate(today).map((r) => {
-      const fmt = recordUtil.formatRecord(r);
-      return { ...r, icon: fmt.icon, title: fmt.title, detail: fmt.detail };
-    });
+    Promise.all([api.getMomRecordsToday(), api.getMomStats()])
+      .then(([todayData, stats]) => {
+        const pageSubtitle =
+          this.data.viewTab === 'record'
+            ? `今日 · ${today}`
+            : `共 ${stats.totalDays} 天 · 左右滑动查看`;
 
-    const mom = storage.getMom();
-    const momRecords = storage.getMomRecords();
-    const momStats = statsUtil.buildMomStats(momRecords, mom.deliveryDate);
-
-    const pageSubtitle =
-      this.data.viewTab === 'record'
-        ? `今日 · ${today}`
-        : `共 ${momStats.totalDays} 天 · 左右滑动查看`;
-
-    this.setData({
-      today,
-      records,
-      chartDays: momStats.chartDays,
-      detailDays: momStats.detailDays,
-      hasTrendData: momStats.hasAnyData,
-      totalDays: momStats.totalDays,
-      pageSubtitle,
-    });
+        this.setData({
+          today,
+          records: todayData.list || [],
+          chartDays: stats.chartDays || [],
+          detailDays: stats.detailDays || [],
+          hasTrendData: stats.hasAnyData,
+          totalDays: stats.totalDays,
+          pageSubtitle,
+        });
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '加载失败', icon: 'none' });
+      });
   },
 
   switchView(e) {
@@ -71,14 +67,20 @@ Page({
 
   onDelete(e) {
     const { id } = e.currentTarget.dataset;
+    const that = this;
     wx.showModal({
       title: '删除记录',
       content: '确定删除这条记录吗？',
-      success: (res) => {
-        if (res.confirm) {
-          storage.updateMomRecord(id, { deleted: true });
-          this.loadData();
-        }
+      success(res) {
+        if (!res.confirm) return;
+        api
+          .deleteMomRecord(id)
+          .then(() => {
+            that.loadData();
+          })
+          .catch((err) => {
+            wx.showToast({ title: err.message || '删除失败', icon: 'none' });
+          });
       },
     });
   },

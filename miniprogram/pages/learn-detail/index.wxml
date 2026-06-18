@@ -1,4 +1,4 @@
-<page-header title="{{article.title}}" show-back="{{true}}" />
+<page-header title="{{article ? article.title : '文章详情'}}" show-back="{{true}}" />
 <view class="container" wx:if="{{article}}">
   <view class="detail-card">
     <view class="detail-head">

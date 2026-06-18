@@ -1,11 +1,9 @@
-const storage = require('../../utils/storage');
-const confinement = require('../../utils/confinement');
-const knowledge = require('../../utils/knowledge');
+const api = require('../../utils/api');
 
 Page({
   data: {
     activeCategory: 'all',
-    categories: knowledge.CATEGORIES,
+    categories: [],
     articles: [],
     recommended: [],
     confinementDay: 1,
@@ -13,37 +11,44 @@ Page({
   },
 
   onShow() {
-    const app = getApp();
-    if (!app.checkOnboarding()) return;
-    this.loadData();
+    getApp().checkOnboarding().then((ok) => {
+      if (!ok) return;
+      this.loadData();
+    });
   },
 
   loadData() {
-    const mom = storage.getMom();
-    const settings = storage.getSettings();
-    const info = confinement.getConfinementDay(mom.deliveryDate, settings.totalDays);
-    const recommended = knowledge.getRecommendedArticles(info.day, 3);
-    const articles = this.mapArticles(knowledge.getArticles(this.data.activeCategory));
-
-    this.setData({
-      recommended,
-      articles,
-      confinementDay: info.day,
-      stageName: info.stage.name,
-    });
+    Promise.all([api.getKnowledgeCategories(), api.getKnowledgeRecommended(3)])
+      .then(([catData, recommendedData]) => {
+        const categories = catData.list || [];
+        return api.getKnowledgeArticles(this.data.activeCategory).then((articlesData) => {
+          this.setData({
+            categories,
+            recommended: recommendedData.list || [],
+            articles: articlesData.list || [],
+            confinementDay: recommendedData.confinementDay || 1,
+            stageName: recommendedData.stageName || '',
+          });
+        });
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '加载失败', icon: 'none' });
+      });
   },
 
   onCategoryChange(e) {
     const activeCategory = e.currentTarget.dataset.id;
-    const articles = this.mapArticles(knowledge.getArticles(activeCategory));
-    this.setData({ activeCategory, articles });
-  },
-
-  mapArticles(list) {
-    return list.map((a) => ({
-      ...a,
-      categoryLabel: knowledge.getCategoryLabel(a.category),
-    }));
+    api
+      .getKnowledgeArticles(activeCategory)
+      .then((articlesData) => {
+        this.setData({
+          activeCategory,
+          articles: articlesData.list || [],
+        });
+      })
+      .catch((err) => {
+        wx.showToast({ title: err.message || '加载失败', icon: 'none' });
+      });
   },
 
   onOpenArticle(e) {
