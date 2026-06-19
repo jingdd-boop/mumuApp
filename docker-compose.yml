@@ -1,0 +1,62 @@
+services:
+  # ── MySQL 数据库 ────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: tinydays-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: tinydays
+      MYSQL_USER: tinydays
+      MYSQL_PASSWORD: ${DB_PASSWORD:-tinydays_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./server/sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "tinydays", "-p${DB_PASSWORD:-tinydays_password}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ── Express 后端 ────────────────────────────────────────────
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: tinydays-server
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET:-change-this-in-production}
+      WECHAT_APP_ID: ${WECHAT_APP_ID:-}
+      WECHAT_APP_SECRET: ${WECHAT_APP_SECRET:-}
+      DEV_OPENID: ${DEV_OPENID:-dev_local_user}
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: tinydays
+      DB_PASSWORD: ${DB_PASSWORD:-tinydays_password}
+      DB_NAME: tinydays
+    ports:
+      - "3000:3000"
+
+  # ── React 前端（Nginx）─────────────────────────────────────
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: tinydays-web
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "80:80"
+
+volumes:
+  mysql_data:
